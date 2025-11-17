@@ -1,0 +1,16 @@
+[package]
+name = "compiler"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+name = "compiler"
+path = "src/lib.rs"
+
+[[bin]]
+name = "compiler"
+path = "src/main.rs"
+
+[dependencies]
+#llvm-sys = "201.0.0"
+llvm-sys = "191.0.0"

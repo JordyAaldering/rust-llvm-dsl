@@ -1,7 +1,7 @@
 use std::process::Command;
 use std::path::Path;
 
-use compiler::compile;
+use compiler::{parse, compile};
 
 fn main() {
     let out_dir = std::env::var("OUT_DIR").unwrap();
@@ -10,7 +10,8 @@ fn main() {
 
     println!("cargo:rerun-if-changed=src/simple.dsl");
 
-    compile("src/simple.dsl", dst_ll.to_str().unwrap());
+    let ast = parse("src/simple.dsl");
+    compile(ast, dst_ll.to_str().unwrap());
 
     // 2. Convert LLVM IR → object file using llvm-as + llc
     Command::new("llvm-as")

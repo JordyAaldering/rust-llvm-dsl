@@ -1,6 +1,10 @@
 use crate::ast::*;
 
 pub fn compile_header(fundef: Fundef) -> String {
+    let mut s = String::new();
+
+    //c_code.push_str("#include <stdint.h>\n\n");
+
     let ret_type = match fundef.ret_type {
         Type::I32 => "i32",
     };
@@ -12,5 +16,14 @@ pub fn compile_header(fundef: Fundef) -> String {
         format!("{}: {}", id, ty_str)
     }).collect();
 
-    format!("unsafe extern \"C\" {{\n    fn {}({}) -> {};\n}}\n", fundef.name, args.join(", "), ret_type)
+    s.push_str("unsafe extern \"C\" {\n");
+    s.push_str(&format!("    fn DSL_{}({}) -> {};\n", fundef.name, args.join(", "), ret_type));
+    s.push_str("}\n\n");
+
+    // Here we have the opportunity to add checks, dispatch to different implementations, etc.
+    s.push_str(&format!("unsafe fn {}({}) -> {} {{\n", fundef.name, args.join(", "), ret_type));
+    s.push_str(&format!("    unsafe {{ DSL_{}({}) }}\n", fundef.name, fundef.args.iter().map(|(_, id)| id.clone()).collect::<Vec<_>>().join(", ")));
+    s.push_str("}\n");
+
+    s
 }

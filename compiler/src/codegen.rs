@@ -42,7 +42,7 @@ impl CodegenContext {
             // 2. Declare the function
             let function = LLVMAddFunction(
                 self.module,
-                f.name.as_ptr() as *const _,
+                (format!("DSL_{}", f.name)).as_ptr() as *const _,
                 fn_type,
             );
 
@@ -57,9 +57,9 @@ impl CodegenContext {
 
             // 4. Build variable map (arguments)
             let mut vars = HashMap::new();
-            for (i, (_, name)) in f.args.iter().enumerate() {
+            for (i, (_, id)) in f.args.iter().enumerate() {
                 let param = LLVMGetParam(function, i as u32);
-                vars.insert(name.clone(), param);
+                vars.insert(id.clone(), param);
             }
 
             // 5. Compile the function body

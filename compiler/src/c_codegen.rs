@@ -3,19 +3,21 @@ use crate::ast::*;
 pub fn compile_fundef(fundef: Fundef) -> String {
     let mut c_code = String::new();
 
+    c_code.push_str("#include <stdint.h>\n\n");
+
     // Function signature
     let ret_type = match fundef.ret_type {
-        Type::I32 => "int",
+        Type::I32 => "int32_t",
     };
 
     let args: Vec<String> = fundef.args.iter().map(|(ty, name)| {
         let ty_str = match ty {
-            Type::I32 => "int",
+            Type::I32 => "int32_t",
         };
         format!("{} {}", ty_str, name)
     }).collect();
 
-    c_code.push_str(&format!("{} {}({}) {{\n", ret_type, fundef.name, args.join(", ")));
+    c_code.push_str(&format!("{} DSL_{}({}) {{\n", ret_type, fundef.name, args.join(", ")));
 
     c_code.push_str(&format!("    return {};\n", compile_expr(fundef.body)));
 

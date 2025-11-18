@@ -7,6 +7,7 @@ pub mod lexer;
 pub mod parser;
 pub mod codegen;
 pub mod c_codegen;
+pub mod header;
 
 pub fn parse(infile: &str) -> ast::Fundef {
     let src = std::fs::read_to_string(infile).unwrap();
@@ -28,4 +29,9 @@ pub fn compile(ast: ast::Fundef, outfile: &str) {
 pub fn compile_c(ast: ast::Fundef, outfile: &str) {
     let res = c_codegen::compile_fundef(ast);
     std::fs::write(outfile, res).unwrap();
+}
+
+pub fn compile_header(ast: ast::Fundef, outfile: &str) {
+    let header = header::compile_header(ast);
+    std::fs::write(outfile, header).unwrap();
 }

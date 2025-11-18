@@ -1,7 +1,5 @@
-unsafe extern "C" {
-    fn addthem(x: i32, y: i32) -> i32;
-}
+include!(concat!(env!("OUT_DIR"), "/simple.rs"));
 
 fn main() {
-    println!("Hello, world! {}", unsafe { addthem(4, 2) });
+    println!("Hello, world! {}", unsafe { addthem(3, 7) });
 }

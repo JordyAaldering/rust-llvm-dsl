@@ -21,7 +21,7 @@ pub fn compile_header(fundef: Fundef) -> String {
     s.push_str("}\n\n");
 
     // Here we have the opportunity to add checks, dispatch to different implementations, etc.
-    s.push_str(&format!("unsafe fn {}({}) -> {} {{\n", fundef.name, args.join(", "), ret_type));
+    s.push_str(&format!("fn {}({}) -> {} {{\n", fundef.name, args.join(", "), ret_type));
     s.push_str(&format!("    unsafe {{ DSL_{}({}) }}\n", fundef.name, fundef.args.iter().map(|(_, id)| id.clone()).collect::<Vec<_>>().join(", ")));
     s.push_str("}\n");
 
